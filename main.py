@@ -6,9 +6,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 
-# Load data
-data_path = '9606.protein.links.v12.0.txt'
-data = pd.read_csv(data_path, delimiter=' ')
+# Load data from multiple files
+file_names = [f'9606_part{i}.txt' for i in range(1, 8)]
+data_frames = []
+for file_name in file_names:
+    df = pd.read_csv(file_name, delimiter=' ')
+    data_frames.append(df)
+
+# Concatenate all dataframes into one
+data = pd.concat(data_frames, ignore_index=True)
 
 # Filter data for high-confidence interactions
 high_confidence_data = data[data['combined_score'] >= 700]
